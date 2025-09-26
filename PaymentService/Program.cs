@@ -61,7 +61,7 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddHttpClient("Auth", c =>
 {
-    c.BaseAddress = new Uri(builder.Configuration["https://group-project-authservice-ebbpd0c8g2fabqdr.swedencentral-01.azurewebsites.net"]);
+    c.BaseAddress = new Uri("https://group-project-authservice-ebbpd0c8g2fabqdr.swedencentral-01.azurewebsites.net");
 });
 
 
