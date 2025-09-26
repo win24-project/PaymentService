@@ -45,16 +45,16 @@ namespace PaymentService.Controllers
                     {
                         var s = (Stripe.Checkout.Session)stripeEvent.Data.Object;
                         s.Metadata.TryGetValue("accountId", out var accountId);
+                        var dto = new
+                        {
+                            accountId,
+                            customerId = s.CustomerId,
+                            subscriptionStatus = "active",
 
-                        var customerId = s.CustomerId;
-                        var subscriptionStatus = "active";
+                        };
 
-                        var accessToken = Request.Headers["Authorization"].ToString()?.Replace("Bearer", "");
-                        var Client = new HttpClient();
-                        Client.DefaultRequestHeaders.Authorization =
-                                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
-                        var response = await Client.PostAsync("https://group-project-authservice-ebbpd0c8g2fabqdr.swedencentral-01.azurewebsites.net/change-subscription-status?status=active", new StringContent(""));
-       
+
+                        await _auth.PostAsJsonAsync("/profile/add-subscription", dto);
                         break;
                     }
                 case "invoice.payment_succeeded":
