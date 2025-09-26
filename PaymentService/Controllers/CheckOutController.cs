@@ -30,7 +30,7 @@ namespace PaymentService.Controllers
             StripeConfiguration.ApiKey = secretKey ?? throw new ArgumentNullException("StripeSecretKey is not configured.");
 
             var accountId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var email = User.FindFirst("email")?.Value;
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
             if (accountId == null || email == null)
             {
                 return Unauthorized("User information is missing.");
