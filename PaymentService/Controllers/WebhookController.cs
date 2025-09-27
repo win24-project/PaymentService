@@ -44,15 +44,14 @@ namespace PaymentService.Controllers
                 case "checkout.session.completed":
                     {
                         var s = (Stripe.Checkout.Session)stripeEvent.Data.Object;
-                        s.Metadata.TryGetValue("accountId", out var accountId);
+                        s.Metadata.TryGetValue("account_Id", out var accountId);
                         var dto = new
                         {
-                            accountId,
-                            customerId = s.CustomerId,
+                            accountId = accountId,
+                            customerId = s.Customer,
                             subscriptionStatus = "active",
 
                         };
-
 
                         await _auth.PostAsJsonAsync("/profile/add-subscription", dto);
                         break;
