@@ -43,17 +43,24 @@ namespace PaymentService.Controllers
             {
                 case "checkout.session.completed":
                     {
-                        var s = (Stripe.Checkout.Session)stripeEvent.Data.Object;
-                        s.Metadata.TryGetValue("account_Id", out var accountId);
+                        var s = (Session)stripeEvent.Data.Object;
+
+                        // metadata key you set when creating the session
+                        s.Metadata.TryGetValue("account_id", out var accountId);
+                        if (string.IsNullOrWhiteSpace(accountId))
+                            accountId = s.ClientReferenceId;
+
+                        var customerId = s.CustomerId;
+
                         var dto = new
                         {
-                            accountId = accountId,
-                            customerId = s.Customer,
-                            subscriptionStatus = "active",
-
+                            accountId,
+                            customerId,
+                            subscriptionStatus = "active"
                         };
 
-                        await _auth.PostAsJsonAsync("profile/add-subscription", dto);
+                        await _auth.PostAsJsonAsync("/profile/add-subscription", dto);
+
                         break;
                     }
                 case "invoice.payment_succeeded":
