@@ -18,7 +18,7 @@ namespace PaymentService.Controllers
         public WebhookController(IConfiguration configuration, IHttpClientFactory factory)
         {
             _configuration = configuration;
-            _auth = factory.CreateClient("auth");
+            _auth = factory.CreateClient("Auth");
         }
 
         [HttpPost]
