@@ -53,7 +53,7 @@ namespace PaymentService.Controllers
 
                         };
 
-                        await _auth.PostAsJsonAsync("/profile/add-subscription", dto);
+                        await _auth.PostAsJsonAsync("profile/add-subscription", dto);
                         break;
                     }
                 case "invoice.payment_succeeded":
