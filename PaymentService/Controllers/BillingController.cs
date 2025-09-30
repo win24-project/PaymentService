@@ -33,8 +33,8 @@ namespace PaymentService.Controllers
                 return Unauthorized("User information is missing.");
             }
 
-            var map = await _auth.GetFromJsonAsync<UserStripeModel>($"/profile/{accountId}");
-            if (map == null || string.IsNullOrWhiteSpace(map.customerId))
+            var customerId = await _auth.GetFromJsonAsync<string>($"/profile/{accountId}");
+            if (string.IsNullOrWhiteSpace(customerId))
             {
                 return BadRequest("No customer ID found for user.");
             }
@@ -42,7 +42,7 @@ namespace PaymentService.Controllers
             var portal = new Stripe.BillingPortal.SessionService();
             var session = await portal.CreateAsync(new Stripe.BillingPortal.SessionCreateOptions
             {
-                Customer = map.customerId,
+                Customer = customerId,
                 ReturnUrl = "https://happy-mud-02a876a03.2.azurestaticapps.net"
             });
 
