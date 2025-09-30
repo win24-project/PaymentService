@@ -120,7 +120,7 @@ namespace PaymentService.Controllers
                             customerId = sub.CustomerId,
                             membershipPlan = planName
                         };
-                        await _auth.PostAsJsonAsync("/profile/change-membership-plan", dto);
+                        await _auth.PostAsJsonAsync($"/profile/change-membership-plan?customerId={sub.CustomerId}&membershipPlan={planName}", dto);
                         break;
                     }
                 case "customer.subscription.created":
@@ -135,7 +135,7 @@ namespace PaymentService.Controllers
                             customerId = sub.CustomerId,
                             membershipPlan = planName
                         };
-                        await _auth.PostAsJsonAsync("/profile/change-membership-plan", dto);
+                        await _auth.PostAsJsonAsync($"/profile/change-membership-plan?customerId={sub.CustomerId}&membershipPlan={planName}", dto);
                         break;
                     }
 
