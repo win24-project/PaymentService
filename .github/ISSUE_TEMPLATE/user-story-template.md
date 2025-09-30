@@ -1,16 +1,7 @@
 ---
 name: User Story template
 about: Describe this issue template's purpose here.
-title: ''
-labels: ''
-assignees: ''
-
----
-
----
-name: User Story Template
-about: Describe this issue template's purpose here.
-title: Som en [roll] vill jag kunna [funktion] så att [nytta]
+title: 'Som en [roll] vill jag kunna [funktion] så att [nytta]'
 labels: ''
 assignees: ''
 
