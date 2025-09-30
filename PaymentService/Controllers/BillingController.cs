@@ -33,7 +33,7 @@ namespace PaymentService.Controllers
                 return Unauthorized("User information is missing.");
             }
 
-            var customerId = await _auth.GetFromJsonAsync<string>($"/profile/{accountId}");
+            var customerId = await _auth.GetStringAsync($"/profile/{accountId}");
             if (string.IsNullOrWhiteSpace(customerId))
             {
                 return BadRequest("No customer ID found for user.");
