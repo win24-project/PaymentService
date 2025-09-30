@@ -111,16 +111,13 @@ namespace PaymentService.Controllers
                 case "customer.subscription.updated":
                     {
                         var sub = (Subscription)stripeEvent.Data.Object;
-                        var s = (Session)stripeEvent.Data.Object;
-                        s.Metadata.TryGetValue("account_id", out var accountId);
-                        if (string.IsNullOrWhiteSpace(accountId))
-                            accountId = s.ClientReferenceId;
+
                         List<string> priceId = ["price_1SBYqpPZLXb0VQaIu5bHdpEW", "price_1SBC2qPZLXb0VQaIKiKGmL61", "price_1SBC34PZLXb0VQaIsVYINbGc"];
                         List<string> planNames = ["basic", "standard", "premium"];
                         string planName = planNames[priceId.IndexOf(sub.Items.Data[0].Price.Id)];
                         var dto = new
                         {
-                            accountId,
+                            customerId = sub.CustomerId,
                             membershipPlan = planName
                         };
                         await _auth.PostAsJsonAsync("/profile/change-membership-plan", dto);
@@ -129,19 +126,16 @@ namespace PaymentService.Controllers
                 case "customer.subscription.created":
                     {
                         var sub = (Subscription)stripeEvent.Data.Object;
-                        var s = (Session)stripeEvent.Data.Object;
-                        s.Metadata.TryGetValue("account_id", out var accountId);
-                        if (string.IsNullOrWhiteSpace(accountId))
-                            accountId = s.ClientReferenceId;
+
                         List<string> priceId = ["price_1SBYqpPZLXb0VQaIu5bHdpEW", "price_1SBC2qPZLXb0VQaIKiKGmL61", "price_1SBC34PZLXb0VQaIsVYINbGc"];
                         List<string> planNames = ["basic", "standard", "premium"];
                         string planName = planNames[priceId.IndexOf(sub.Items.Data[0].Price.Id)];
                         var dto = new
                         {
-                            accountId,
+                            customerId = sub.CustomerId,
                             membershipPlan = planName
                         };
-                        await _auth.PostAsJsonAsync("/profile/add-subscription", dto);
+                        await _auth.PostAsJsonAsync("/profile/change-membership-plan", dto);
                         break;
                     }
 
