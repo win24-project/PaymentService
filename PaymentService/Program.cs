@@ -52,7 +52,7 @@ builder.Services.AddAuthentication(o => o.DefaultAuthenticateScheme = JwtBearerD
             ValidAudience = builder.Configuration["JwtAudience"],
             ValidIssuer = builder.Configuration["JwtIssuer"],
             IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(builder.Configuration["JwtPublicKey"]))
+            Encoding.UTF8.GetBytes(builder.Configuration["JwtSecret"]))
         };
         o.MapInboundClaims = true;
     });
