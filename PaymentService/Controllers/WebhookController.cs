@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using Stripe;
 using Stripe.Checkout;
+using System.Globalization;
 
 
 namespace PaymentService.Controllers
@@ -57,6 +58,7 @@ namespace PaymentService.Controllers
                             accountId,
                             customerId,
                             subscriptionStatus = "active"
+
                         };
 
                         await _auth.PostAsJsonAsync("/profile/add-subscription", dto);
@@ -89,6 +91,57 @@ namespace PaymentService.Controllers
                             subscriptionStatus = "past_due"
                         };
                         await _auth.PostAsJsonAsync("/api/", dto);
+                        break;
+                    }
+                //case "customer.subscription.deleted":
+                //    {
+                //        var sub = (Subscription)stripeEvent.Data.Object;
+                //        var s = (Session)stripeEvent.Data.Object;
+                //        s.Metadata.TryGetValue("account_id", out var accountId);
+                //        if (string.IsNullOrWhiteSpace(accountId))
+                //            accountId = s.ClientReferenceId;
+                //        var dto = new
+                //        {
+                //            accountId,
+                //            subscriptionStatus = "canceled"
+                //        };
+                //        await _auth.PostAsJsonAsync("/profile/change-subscription-status", dto);
+                //        break;
+                //    }
+                case "customer.subscription.updated":
+                    {
+                        var sub = (Subscription)stripeEvent.Data.Object;
+                        var s = (Session)stripeEvent.Data.Object;
+                        s.Metadata.TryGetValue("account_id", out var accountId);
+                        if (string.IsNullOrWhiteSpace(accountId))
+                            accountId = s.ClientReferenceId;
+                        List<string> priceId = ["price_1SBYqpPZLXb0VQaIu5bHdpEW", "price_1SBC2qPZLXb0VQaIKiKGmL61", "price_1SBC34PZLXb0VQaIsVYINbGc"];
+                        List<string> planNames = ["basic", "standard", "premium"];
+                        string planName = planNames[priceId.IndexOf(sub.Items.Data[0].Price.Id)];
+                        var dto = new
+                        {
+                            accountId,
+                            membershipPlan = planName
+                        };
+                        await _auth.PostAsJsonAsync("/profile/change-membership-plan", dto);
+                        break;
+                    }
+                case "customer.subscription.created":
+                    {
+                        var sub = (Subscription)stripeEvent.Data.Object;
+                        var s = (Session)stripeEvent.Data.Object;
+                        s.Metadata.TryGetValue("account_id", out var accountId);
+                        if (string.IsNullOrWhiteSpace(accountId))
+                            accountId = s.ClientReferenceId;
+                        List<string> priceId = ["price_1SBYqpPZLXb0VQaIu5bHdpEW", "price_1SBC2qPZLXb0VQaIKiKGmL61", "price_1SBC34PZLXb0VQaIsVYINbGc"];
+                        List<string> planNames = ["basic", "standard", "premium"];
+                        string planName = planNames[priceId.IndexOf(sub.Items.Data[0].Price.Id)];
+                        var dto = new
+                        {
+                            accountId,
+                            membershipPlan = planName
+                        };
+                        await _auth.PostAsJsonAsync("/profile/add-subscription", dto);
                         break;
                     }
 
