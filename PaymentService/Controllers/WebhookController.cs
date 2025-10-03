@@ -101,7 +101,7 @@ namespace PaymentService.Controllers
                         {
                             subscriptionStatus = "canceled"
                         };
-                        await _auth.PostAsJsonAsync("/profile/change-subscription-status?subscriptionStatus=canceled", dto);
+                        await _auth.PostAsJsonAsync($"/profile/change-subscription-status?customerId={sub.CustomerId}&subscriptionStatus=canceled", dto);
                         break;
                     }
                 case "customer.subscription.updated":
