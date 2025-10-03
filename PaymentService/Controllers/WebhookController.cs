@@ -99,7 +99,7 @@ namespace PaymentService.Controllers
 
                         var dto = new
                         {
-                            subscriptionStatus = "canceled"
+                            removeCustomerId = true,
                         };
                         await _auth.PostAsJsonAsync($"/profile/change-subscription-status?customerId={sub.CustomerId}&status=canceled", dto);
                         break;
