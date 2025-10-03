@@ -93,21 +93,17 @@ namespace PaymentService.Controllers
                         await _auth.PostAsJsonAsync("/api/", dto);
                         break;
                     }
-                //case "customer.subscription.deleted":
-                //    {
-                //        var sub = (Subscription)stripeEvent.Data.Object;
-                //        var s = (Session)stripeEvent.Data.Object;
-                //        s.Metadata.TryGetValue("account_id", out var accountId);
-                //        if (string.IsNullOrWhiteSpace(accountId))
-                //            accountId = s.ClientReferenceId;
-                //        var dto = new
-                //        {
-                //            accountId,
-                //            subscriptionStatus = "canceled"
-                //        };
-                //        await _auth.PostAsJsonAsync("/profile/change-subscription-status", dto);
-                //        break;
-                //    }
+                case "customer.subscription.deleted":
+                    {
+                        var sub = (Subscription)stripeEvent.Data.Object;
+
+                        var dto = new
+                        {
+                            subscriptionStatus = "canceled"
+                        };
+                        await _auth.PostAsJsonAsync("/profile/change-subscription-status?subscriptionStatus=canceled", dto);
+                        break;
+                    }
                 case "customer.subscription.updated":
                     {
                         var sub = (Subscription)stripeEvent.Data.Object;
